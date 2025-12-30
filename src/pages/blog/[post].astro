@@ -4,7 +4,7 @@ import PageHeader from '@components/PageHeader.astro'
 import SocialShares from '@components/SocialShares.astro'
 import { Heading } from 'accessible-astro-components'
 import { getCollection, render } from 'astro:content'
-import authorsJson from './authors.json'
+import authorsJson from './_authors.json'
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog')

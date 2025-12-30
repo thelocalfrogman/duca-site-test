@@ -4,7 +4,7 @@ This documentation explains how to manage authors on this Astro site.
 
 ## How to Add a New Author
 
-The JSON file `src/pages/blog/authors.json` contains all information about authors.
+The JSON file `src/pages/blog/_authors.json` contains all information about authors.
 
 ```json
 {
