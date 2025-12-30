@@ -3,9 +3,8 @@ import DefaultLayout from '@layouts/DefaultLayout.astro'
 import PageHeader from '@components/PageHeader.astro'
 import { Card, Pagination } from 'accessible-astro-components'
 import { getCollection } from 'astro:content'
-import type { GetStaticPaths, Page } from 'astro'
-import type { CollectionEntry } from 'astro:content'
-
+import type { GetStaticPaths } from 'astro'
+import authorsJson from './authors.json'
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getCollection('blog')
@@ -38,11 +37,17 @@ export const getStaticPaths = (async ({ paginate }) => {
   })
 }) satisfies GetStaticPaths
 
-interface Props {
-  page: Page<CollectionEntry<'blog'> & { featuredImage: any; slug: string }>
-}
 
 const { page } = Astro.props
+
+// ----- Author Lookup -----
+type Author = {
+  name: string
+  image: string
+  bio: string
+}
+
+const authors = authorsJson as Record<string, Author>
 ---
 
 <DefaultLayout
@@ -60,20 +65,25 @@ const { page } = Astro.props
       <p class="text-sm"><em>Post {page.start + 1} through {page.end + 1} of {page.total} total posts</em></p>
       <ul class="my-3 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {
-          page.data.map((post) => (
-            <li>
-              <Card
-                imageComponent={post.featuredImage}
-                url={'/blog/' + post.data.slug}
-                title={post.data.title}
-                headingLevel="h2"
-                footer={'Author: ' + post.data.author}
-                fullHeight={true}
-              >
-                {post.data.description}
-              </Card>
-            </li>
-          ))
+          page.data.map((post) => {
+            const author = authors[post.data.author]
+            const authorName = author ? author.name : post.data.author
+
+            return (
+              <li>
+                <Card
+                  imageComponent={post.featuredImage}
+                  url={'/blog/' + post.data.slug}
+                  title={post.data.title}
+                  headingLevel="h2"
+                  footer={`Author: ${authorName}`}
+                  fullHeight={true}
+                >
+                  {post.data.description}
+                </Card>
+              </li>
+            )
+          })
         }
       </ul>
       {

@@ -2,7 +2,7 @@
 import { Card, Heading, Link } from 'accessible-astro-components'
 import { Icon } from 'astro-icon/components'
 import { getCollection } from 'astro:content'
-import { slugify } from '@/utils/slugify'
+import authorsJson from '../pages/blog/authors.json'
 
 /**
  * FeaturedPosts Component
@@ -28,6 +28,13 @@ interface Props {
 
 const { class: className, limit = 3, title = 'Latest blog posts' } = Astro.props
 
+type Author = {
+  name: string
+  image: string
+  bio: string
+}
+const authors = authorsJson as Record<string, Author>
+
 // Get posts from content collection
 const allPosts = await getCollection('blog')
 
@@ -46,10 +53,14 @@ const featuredPosts = await Promise.all(
       featuredImage = imageModule.default
     }
 
+    const author = authors[post.data.author]
+    const authorName = author ? author.name : post.data.author
+
     return {
       ...post,
       featuredImage,
       slug: post.data.slug,
+      authorName,
     }
   })
 )
@@ -66,7 +77,7 @@ const featuredPosts = await Promise.all(
             url={'/blog/' + post.data.slug}
             headingLevel="h2"
             title={post.data.title}
-            footer={'Author: ' + post.data.author}
+            footer={`Author: ${post.authorName}`}
           >
             {post.data.description}
           </Card>
