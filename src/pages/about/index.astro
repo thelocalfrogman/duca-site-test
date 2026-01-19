@@ -3,13 +3,6 @@ import DefaultLayout from '@layouts/DefaultLayout.astro'
 import PageHeader from '@components/PageHeader.astro'
 import { Heading } from 'accessible-astro-components'
 import { Image } from 'astro:assets'
-import HeroImage from './images/Pink-and-Peach-Watercolour-Textured-Background-Motivational-Quote-Desktop-Wallpaper.webp'
-import Collaboration from './images/core_values/collaboration.png'
-import Development from './images/core_values/development.png'
-import Inclusivity from './images/core_values/inclusivity.png'
-import Innovation from './images/core_values/innovation.png'
-import Inspiration from './images/core_values/inspiration.png'
-import Leadership from './images/core_values/leadership.png'
 ---
 
 <DefaultLayout title="Meet The Team">
@@ -22,7 +15,13 @@ import Leadership from './images/core_values/leadership.png'
     <section class="container mb-24">
         <Heading level="h2" class="mb-7">Who We Are</Heading>
 
-        <Image src={HeroImage} alt="Pink and Peach Watercolour" width={580} height={326} class="mb-4 text-gray-200" />
+        <Image
+            src="/about/images/Pink-and-Peach-Watercolour-Textured-Background-Motivational-Quote-Desktop-Wallpaper.webp"
+            alt="Pink and Peach Watercolour"
+            width={580}
+            height={326}
+            class="mb-4 text-gray-200"
+        />
 
         <p class="mb-4 dark:text-gray-200">
             The Deakin University Cybersecurity Association (DUCA) is a student-led community created by students, for
@@ -68,37 +67,73 @@ import Leadership from './images/core_values/leadership.png'
 
         <div class="grid grid-cols-1 gap-y-7 md:grid-cols-2 lg:grid-cols-3">
             <div class="flex flex-col items-center justify-start gap-0 text-center">
-                <Image src={Inspiration} alt="Inspiration" class="mb-4" width={80} height={80} />
+                <Image
+                    src="/about/images/core_values/inspiration.png"
+                    alt="Inspiration"
+                    class="mb-4"
+                    width={80}
+                    height={80}
+                />
                 <div class="text-2xl font-bold">Inspiration</div>
                 <div class="text-balance">Empowering members to explore and grow together.</div>
             </div>
 
             <div class="flex flex-col items-center justify-start gap-0 text-center">
-                <Image src={Innovation} alt="Innovation" class="mb-4" width={80} height={80} />
+                <Image
+                    src="/about/images/core_values/innovation.png"
+                    alt="Innovation"
+                    class="mb-4"
+                    width={80}
+                    height={80}
+                />
                 <div class="text-2xl font-bold">Innovation</div>
                 <div class="text-balance">Driving creative solutions for cybersecurity’s future.</div>
             </div>
 
             <div class="flex flex-col items-center justify-start gap-0 text-center">
-                <Image src={Inclusivity} alt="Inclusivity" class="mb-4" width={80} height={80} />
+                <Image
+                    src="/about/images/core_values/inclusivity.png"
+                    alt="Inclusivity"
+                    class="mb-4"
+                    width={80}
+                    height={80}
+                />
                 <div class="text-2xl font-bold">Inclusivity</div>
                 <div class="text-balance">Building a welcoming and diverse community.</div>
             </div>
 
             <div class="flex flex-col items-center justify-start gap-0 text-center">
-                <Image src={Collaboration} alt="Collaboration" class="mb-4" width={80} height={80} />
+                <Image
+                    src="/about/images/core_values/collaboration.png"
+                    alt="Collaboration"
+                    class="mb-4"
+                    width={80}
+                    height={80}
+                />
                 <div class="text-2xl font-bold">Collaboration</div>
                 <div class="text-balance">Strengthening teamwork to achieve shared goals.</div>
             </div>
 
             <div class="flex flex-col items-center justify-start text-center">
-                <Image src={Development} alt="Development" class="mb-4" width={80} height={80} />
+                <Image
+                    src="/about/images/core_values/development.png"
+                    alt="Development"
+                    class="mb-4"
+                    width={80}
+                    height={80}
+                />
                 <div class="text-2xl font-bold">Development</div>
                 <div class="text-balance">Preparing students for professional industry success.</div>
             </div>
 
             <div class="flex flex-col items-center justify-start text-center">
-                <Image src={Leadership} alt="Leadership" class="mb-4" width={80} height={80} />
+                <Image
+                    src="/about/images/core_values/leadership.png"
+                    alt="Leadership"
+                    class="mb-4"
+                    width={80}
+                    height={80}
+                />
                 <div class="text-2xl font-bold">Leadership</div>
                 <div class="text-balance">Inspiring tomorrow’s cybersecurity leaders and innovators.</div>
             </div>
