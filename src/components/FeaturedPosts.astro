@@ -78,7 +78,7 @@ const featuredPosts = sortedPosts.slice(0, limit).map((post) => {
         featuredPosts.map((post) => (
           <Card
             imageComponent={post.featuredImage}
-            url={'/blog/' + post.data.slug}
+            url={Astro.resolve(`/blog/${post.data.slug}`)}
             headingLevel="h2"
             title={post.data.title}
             footer={`Author: ${post.authorName}`}
@@ -89,7 +89,7 @@ const featuredPosts = sortedPosts.slice(0, limit).map((post) => {
       }
     </div>
     <div class="mt-12">
-      <Link href="/blog/" isButton animateOnHover animationType="nudge">
+      <Link href={Astro.resolve('/blog/')} isButton animateOnHover animationType="nudge">
         Read all blog posts
         <Icon aria-hidden="true" name="lucide:arrow-right" size="1.5rem" />
       </Link>

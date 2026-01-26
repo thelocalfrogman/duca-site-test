@@ -14,16 +14,16 @@ import { Icon } from 'astro-icon/components'
     <SkipLink />
     <Navigation>
         <li class="menu-item">
-            <Link href="/">Home</Link>
+            <Link href={Astro.resolve('/')}>Home</Link>
         </li>
         <li class="menu-item">
-            <Link href="/about/">About</Link>
+            <Link href={Astro.resolve('/about/')}>About</Link>
         </li>
         <li class="menu-item">
-            <Link href="/meet-the-team/">Meet The Team</Link>
+            <Link href={Astro.resolve('/meet-the-team/')}>Meet The Team</Link>
         </li>
         <li class="menu-item">
-            <Link href="/get-involved/">Get Involved</Link>
+            <Link href={Astro.resolve('/get-involved/')}>Get Involved</Link>
         </li>
         <li class="menu-item type-icon animate-rotate">
             <DarkMode>

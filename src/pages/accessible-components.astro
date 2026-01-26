@@ -236,26 +236,26 @@ const components = [
         <p>The Breadcrumbs component is used to display a list of breadcrumbs.</p>
         <Heading level="h3">Default</Heading>
         <Breadcrumbs>
-          <BreadcrumbsItem href="/" label="Home" />
-          <BreadcrumbsItem href="/blog" label="Blog" />
+          <BreadcrumbsItem href={Astro.resolve('/')} label="Home" />
+          <BreadcrumbsItem href={Astro.resolve('/blog')} label="Blog" />
           <BreadcrumbsItem currentPage={true} label="My blog post" />
         </Breadcrumbs>
         <Heading level="h3">With icons</Heading>
         <Breadcrumbs>
-          <BreadcrumbsItem href="/" label="Home" hasIcon>
+          <BreadcrumbsItem href={Astro.resolve('/')} label="Home" hasIcon>
             <Icon aria-hidden="true" name="lucide:home" slot="icon" />
           </BreadcrumbsItem>
-          <BreadcrumbsItem href="/docs" label="Documentation" />
+          <BreadcrumbsItem href={Astro.resolve('/docs')} label="Documentation" />
           <BreadcrumbsItem label="Breadcrumbs" currentPage={true} />
         </Breadcrumbs>
         <Heading level="h3">With custom separator</Heading>
         <Breadcrumbs>
-          <BreadcrumbsItem href="/" label="Home">
+          <BreadcrumbsItem href={Astro.resolve('/')} label="Home">
             <span slot="separator" class="separator" aria-hidden="true">
               <Icon aria-hidden="true" name="lucide:chevron-right" />
             </span>
           </BreadcrumbsItem>
-          <BreadcrumbsItem href="/docs" label="Documentation">
+          <BreadcrumbsItem href={Astro.resolve('/docs')} label="Documentation">
             <span slot="separator" class="separator" aria-hidden="true">
               <Icon aria-hidden="true" name="lucide:chevron-right" />
             </span>
@@ -264,13 +264,13 @@ const components = [
         </Breadcrumbs>
         <Heading level="h3">With custom home icon</Heading>
         <Breadcrumbs>
-          <BreadcrumbsItem href="/" label="Home" hasIcon>
+          <BreadcrumbsItem href={Astro.resolve('/')} label="Home" hasIcon>
             <Icon aria-hidden="true" name="lucide:home" slot="icon" />
             <span slot="separator" class="separator" aria-hidden="true">
               <Icon aria-hidden="true" name="lucide:chevron-right" />
             </span>
           </BreadcrumbsItem>
-          <BreadcrumbsItem href="/docs" label="Documentation">
+          <BreadcrumbsItem href={Astro.resolve('/docs')} label="Documentation">
             <span slot="separator" class="separator" aria-hidden="true">
               <Icon aria-hidden="true" name="lucide:chevron-right" />
             </span>
@@ -382,35 +382,35 @@ const components = [
         <Heading level="h2" id="link">Link</Heading>
         <p>The Link component is used to display a link with a type and a color.</p>
         <Heading level="h3">Default</Heading>
-        <Link href="/">Default link</Link>
+        <Link href={Astro.resolve('/')}>Default link</Link>
         <Heading level="h3">External</Heading>
-        <Link href="/" isExternal>External link</Link>
+        <Link href={Astro.resolve('/')} isExternal>External link</Link>
         <Heading level="h3">Link as button</Heading>
         <div class="flex flex-wrap gap-2">
-          <Link href="/" isButton>Default button link</Link>
-          <Link href="/" isButton type="primary">Primary button link</Link>
-          <Link href="/" isButton type="secondary">Secondary button link</Link>
-          <Link href="/" isButton type="info">Info button link</Link>
-          <Link href="/" isButton type="success">Success button link</Link>
-          <Link href="/" isButton type="warning">Warning button link</Link>
-          <Link href="/" isButton type="error">Error button link</Link>
+          <Link href={Astro.resolve('/')} isButton>Default button link</Link>
+          <Link href={Astro.resolve('/')} isButton type="primary">Primary button link</Link>
+          <Link href={Astro.resolve('/')} isButton type="secondary">Secondary button link</Link>
+          <Link href={Astro.resolve('/')} isButton type="info">Info button link</Link>
+          <Link href={Astro.resolve('/')} isButton type="success">Success button link</Link>
+          <Link href={Astro.resolve('/')} isButton type="warning">Warning button link</Link>
+          <Link href={Astro.resolve('/')} isButton type="error">Error button link</Link>
         </div>
         <Heading level="h3">Outline button</Heading>
         <div class="flex flex-wrap gap-2">
-          <Link href="/" isButton type="primary" variant="outlined">Outline primary button link</Link>
-          <Link href="/" isButton type="secondary" variant="outlined">Outline secondary button link</Link>
-          <Link href="/" isButton type="info" variant="outlined">Outline info button link</Link>
-          <Link href="/" isButton type="success" variant="outlined">Outline success button link</Link>
-          <Link href="/" isButton type="warning" variant="outlined">Outline warning button link</Link>
-          <Link href="/" isButton type="error" variant="outlined">Outline error button link</Link>
+          <Link href={Astro.resolve('/')} isButton type="primary" variant="outlined">Outline primary button link</Link>
+          <Link href={Astro.resolve('/')} isButton type="secondary" variant="outlined">Outline secondary button link</Link>
+          <Link href={Astro.resolve('/')} isButton type="info" variant="outlined">Outline info button link</Link>
+          <Link href={Astro.resolve('/')} isButton type="success" variant="outlined">Outline success button link</Link>
+          <Link href={Astro.resolve('/')} isButton type="warning" variant="outlined">Outline warning button link</Link>
+          <Link href={Astro.resolve('/')} isButton type="error" variant="outlined">Outline error button link</Link>
         </div>
         <Heading level="h3">Icon</Heading>
         <div class="flex flex-wrap gap-2">
-          <Link href="/" isButton type="default">
+          <Link href={Astro.resolve('/')} isButton type="default">
             <Icon aria-hidden="true" name="lucide:link" />
             Icon button link</Link
           >
-          <Link href="/" isButton animateOnHover animationType="boop" type="primary">
+          <Link href={Astro.resolve('/')} isButton animateOnHover animationType="boop" type="primary">
             <Icon aria-hidden="true" name="lucide:link" />
             Animated icon button link</Link
           >

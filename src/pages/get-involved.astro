@@ -23,7 +23,7 @@ import { Image } from 'astro:assets'
                 </div>
                 <Image
                     class="hidden lg:block"
-                    src="/astronaut-hero-img.webp"
+                    src={Astro.resolve('/astronaut-hero-img.webp')}
                     alt="DUCA social event"
                     decoding="async"
                     width={800}

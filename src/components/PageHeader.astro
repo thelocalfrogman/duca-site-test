@@ -105,7 +105,7 @@ const sanitizedSubtitle: string = subtitle
 
                     return (
                         <Breadcrumbs>
-                            <BreadcrumbsItem href="/" label="Home" />
+                            <BreadcrumbsItem href={Astro.resolve('/')} label="Home" />
                             {segments.map((segment, index) => {
                                 if (joinLastBreadcrumb && index === segments.length - 1) {
                                     return null
@@ -128,7 +128,7 @@ const sanitizedSubtitle: string = subtitle
 
                                 return (
                                     <BreadcrumbsItem
-                                        href={isLast ? undefined : url}
+                                        href={isLast ? undefined : Astro.resolve(url)}
                                         label={formattedName}
                                         currentPage={isLast}
                                     />
