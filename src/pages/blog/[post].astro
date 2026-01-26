@@ -38,7 +38,9 @@ const author = authors[post.data.author]
 let featuredImage: string | undefined = undefined
 if (post.data.featuredImage) {
   // this path is mentioned relative to this file inside /src/pages/blog/
-  const imageKey = `../../content/blog/${post.data.slug}/${post.data.featuredImage}`
+  // Remove leading ./ from featuredImage path if present
+  const imageFileName = post.data.featuredImage.replace(/^\.\//, '')
+  const imageKey = `../../content/blog/${post.data.slug}/${imageFileName}`
   featuredImage = blogImages[imageKey] as string | undefined
 }
 ---

@@ -52,7 +52,9 @@ const featuredPosts = sortedPosts.slice(0, limit).map((post) => {
 
   if (post.data.featuredImage) {
     // Resolve the image path relative to the content directory
-    const imageKey = `../content/blog/${post.data.slug}/${post.data.featuredImage}`
+    // Remove leading ./ from featuredImage path if present
+    const imageFileName = post.data.featuredImage.replace(/^\.\//, '')
+    const imageKey = `../content/blog/${post.data.slug}/${imageFileName}`
     featuredImage = blogImages[imageKey] as string | undefined
   }
 
