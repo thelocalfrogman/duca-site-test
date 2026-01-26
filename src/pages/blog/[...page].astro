@@ -20,7 +20,7 @@ export const getStaticPaths = (async ({ paginate }) => {
       let featuredImage: string | undefined
 
       if (post.data.featuredImage) {
-        const imageModule = await import(`../../content/blog/${post.data.slug}/${post.data.featuredImage}`)
+        const imageModule = await import(/* @vite-ignore */ `../../content/blog/${post.data.slug}/${post.data.featuredImage}`)
         featuredImage = imageModule.default
       }
 

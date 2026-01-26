@@ -49,7 +49,7 @@ const featuredPosts = await Promise.all(
     let featuredImage: string | undefined = undefined
 
     if (post.data.featuredImage) {
-      const imageModule = await import(`../content/blog/${post.data.slug}/${post.data.featuredImage}`)
+      const imageModule = await import(/* @vite-ignore */ `../content/blog/${post.data.slug}/${post.data.featuredImage}`)
       featuredImage = imageModule.default
     }
 
