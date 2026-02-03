@@ -2,3 +2,208 @@
 
 @source '../../src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}';
 @custom-variant dark (&:where(.darkmode, .darkmode *));
+
+/* CSS Variables for animations */
+:root {
+  --white: #fff;
+  --black: #000;
+  --transparent: transparent;
+  --purple-300: #c084fc;
+  --purple-400: #a855f7;
+  --purple-500: #d648ff;
+  --indigo-300: #a5b4fc;
+  --indigo-500: #6366f1;
+  --violet-200: #ddd6fe;
+  --cyan-500: #06b6d4;
+  --emerald-500: #10b981;
+  --pink-500: #ec4899;
+  --orange-500: #f97316;
+  --yellow-500: #eab308;
+  --slate-900: #0f172a;
+  --neutral-900: #171717;
+}
+
+/* Animation Keyframes */
+@keyframes aurora {
+  from {
+    background-position: 50% 50%, 50% 50%;
+  }
+  to {
+    background-position: 350% 50%, 350% 50%;
+  }
+}
+
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: translate(-72%, -62%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -40%) scale(1);
+  }
+}
+
+@keyframes scroll {
+  to {
+    transform: translate(calc(-50% - 0.5rem));
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes beam-fade {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Animation Classes */
+.animate-aurora {
+  animation: aurora 60s linear infinite;
+}
+
+.animate-spotlight {
+  animation: spotlight 2s ease .75s 1 forwards;
+}
+
+.animate-scroll {
+  animation: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
+}
+
+.animate-marquee {
+  animation: marquee var(--duration) linear infinite;
+}
+
+.animate-marquee-vertical {
+  animation: marquee-vertical var(--duration) linear infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+}
+
+/* Scrollbar Hiding */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Custom Background Patterns */
+.bg-dot-thick-neutral-300 {
+  background-image: radial-gradient(circle, #d4d4d4 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.bg-dot-thick-neutral-800 {
+  background-image: radial-gradient(circle, #262626 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.bg-dot-thick-indigo-500 {
+  background-image: radial-gradient(circle, #6366f1 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Grid Pattern */
+.bg-grid-white\/\[0\.02\] {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Noise Pattern */
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Line Clamp Utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, #d648ff 0%, #00d1b7 50%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass Effect */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Glow Effects */
+.glow-purple {
+  box-shadow: 0 0 20px rgba(214, 72, 255, 0.3), 0 0 40px rgba(214, 72, 255, 0.2);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 209, 183, 0.3), 0 0 40px rgba(0, 209, 183, 0.2);
+}
+
+/* Focus visible for accessibility */
+.focus-ring {
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black;
+}
+
+/* Smooth transitions */
+.transition-smooth {
+  transition: all 0.2s ease-out;
+}
+
+/* No visible scrollbar but scrollable */
+.no-visible-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-visible-scrollbar::-webkit-scrollbar {
+  display: none;
+}

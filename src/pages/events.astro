@@ -1,0 +1,183 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro'
+import { SectionHeading } from '@components/ui/section-heading'
+import { CometCard } from '@components/ui/comet-card'
+import { Button } from '@components/ui/button'
+import { SpotlightNew } from '@components/ui/spotlight'
+
+// Sample events data - replace with real data or fetch from CMS
+const upcomingEvents = [
+  {
+    id: 1,
+    title: "Introduction to Ethical Hacking",
+    date: "Feb 15, 2026",
+    time: "6:00 PM - 8:00 PM",
+    location: "Deakin Burwood Campus",
+    description: "Learn the fundamentals of ethical hacking in this beginner-friendly workshop.",
+    category: "Workshop",
+    registrationUrl: "https://humanitix.com",
+  },
+  {
+    id: 2,
+    title: "CTF Competition Night",
+    date: "Feb 22, 2026",
+    time: "5:00 PM - 9:00 PM",
+    location: "Online",
+    description: "Join us for an exciting Capture The Flag competition with prizes!",
+    category: "Competition",
+    registrationUrl: "https://humanitix.com",
+  },
+  {
+    id: 3,
+    title: "Industry Night: CyberCX",
+    date: "Mar 1, 2026",
+    time: "6:30 PM - 8:30 PM",
+    location: "Deakin Geelong Campus",
+    description: "Meet professionals from CyberCX and learn about career opportunities.",
+    category: "Networking",
+    registrationUrl: "https://humanitix.com",
+  },
+  {
+    id: 4,
+    title: "Network Security Fundamentals",
+    date: "Mar 8, 2026",
+    time: "6:00 PM - 8:00 PM",
+    location: "Deakin Burwood Campus",
+    description: "Deep dive into network security concepts and hands-on exercises.",
+    category: "Workshop",
+    registrationUrl: "https://humanitix.com",
+  },
+]
+
+const pastEvents = [
+  {
+    id: 5,
+    title: "Welcome Week BBQ",
+    date: "Feb 1, 2026",
+    description: "A great start to the semester with food and networking!",
+    category: "Social",
+  },
+  {
+    id: 6,
+    title: "Linux Basics Workshop",
+    date: "Jan 25, 2026",
+    description: "Introduction to Linux command line for cybersecurity.",
+    category: "Workshop",
+  },
+]
+---
+
+<DefaultLayout title="Events">
+  <!-- Hero Section -->
+  <section class="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-black">
+    <div class="absolute inset-0 bg-gradient-to-b from-orange-900/20 via-black to-black"></div>
+    <SpotlightNew className="-top-40 left-0 md:left-60 md:-top-20" fill="#f97316" client:load />
+    <div class="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]"></div>
+
+    <div class="relative z-10 container mx-auto px-4 py-20 text-center">
+      <h1 class="text-5xl md:text-7xl font-bold text-white mb-6">
+        <span class="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">Events</span>
+      </h1>
+      <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+        Join us for workshops, competitions, networking events, and more. There's always something happening at DUCA!
+      </p>
+      <a
+        href="https://humanitix.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center px-6 py-3 rounded-full bg-orange-600 text-white font-semibold hover:bg-orange-700 transition-colors"
+      >
+        Register on Humanitix
+      </a>
+    </div>
+  </section>
+
+  <!-- Upcoming Events -->
+  <section class="py-24 bg-black">
+    <div class="container mx-auto px-4">
+      <SectionHeading
+        title="Upcoming Events"
+        subtitle="Don't miss out on these exciting opportunities"
+        client:visible
+      />
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+        {upcomingEvents.map((event) => (
+          <CometCard className="h-full" client:visible>
+            <div class="flex flex-col h-full">
+              <span class="text-xs font-semibold text-orange-400 uppercase tracking-wider mb-2">
+                {event.category}
+              </span>
+              <h3 class="text-xl font-bold text-white mb-2">{event.title}</h3>
+              <div class="text-gray-400 text-sm mb-4 space-y-1">
+                <p>📅 {event.date}</p>
+                <p>🕐 {event.time}</p>
+                <p>📍 {event.location}</p>
+              </div>
+              <p class="text-gray-300 mb-6 flex-grow">{event.description}</p>
+              <a
+                href={event.registrationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center px-4 py-2 rounded-full bg-orange-600 text-white text-sm font-semibold hover:bg-orange-700 transition-colors w-fit"
+              >
+                Register Now
+              </a>
+            </div>
+          </CometCard>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Past Events -->
+  <section class="py-24 bg-black border-t border-slate-800">
+    <div class="container mx-auto px-4">
+      <SectionHeading
+        title="Past Events"
+        subtitle="Highlights from our previous activities"
+        client:visible
+      />
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+        {pastEvents.map((event) => (
+          <div class="p-6 rounded-xl bg-slate-900/50 border border-slate-800">
+            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              {event.category}
+            </span>
+            <h3 class="text-lg font-bold text-white mt-2 mb-1">{event.title}</h3>
+            <p class="text-gray-500 text-sm mb-2">{event.date}</p>
+            <p class="text-gray-400 text-sm">{event.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 bg-black">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+        Want to stay updated?
+      </h2>
+      <p class="text-gray-400 max-w-2xl mx-auto mb-8">
+        Join our Discord to get instant notifications about upcoming events and activities.
+      </p>
+      <a
+        href="https://discord.gg/duca"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center px-6 py-3 rounded-full bg-purple-600 text-white font-semibold hover:bg-purple-700 transition-colors"
+      >
+        Join Discord
+      </a>
+    </div>
+  </section>
+</DefaultLayout>
+
+<style is:global>
+  body {
+    background-color: #000;
+    color: #fff;
+  }
+</style>
