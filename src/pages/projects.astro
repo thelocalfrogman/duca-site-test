@@ -54,7 +54,7 @@ const projects = allProjects.length > 0 ? allProjects.map(p => ({
   </section>
 
   <!-- Projects Grid -->
-  <section class="py-24 bg-black">
+  <section class="py-24 section-themed">
     <div class="container mx-auto px-4">
       <SectionHeading
         title="Our Projects"
@@ -65,14 +65,14 @@ const projects = allProjects.length > 0 ? allProjects.map(p => ({
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
         {projects.map((project) => (
           <a href={`/portfolio/${project.id}`} class="group">
-            <div class="h-full p-6 rounded-2xl bg-gradient-to-b from-slate-800/50 to-slate-900/80 border border-slate-700/50 hover:border-emerald-500/50 transition-all duration-300">
-              <div class="h-40 rounded-xl bg-gradient-to-br from-emerald-900/30 to-black mb-6 flex items-center justify-center">
+            <div class="h-full p-6 rounded-2xl theme-card border theme-border hover:border-emerald-500/50 transition-all duration-300">
+              <div class="h-40 rounded-xl bg-gradient-to-br from-emerald-900/30 to-emerald-950/50 mb-6 flex items-center justify-center">
                 <span class="text-6xl opacity-50">🔐</span>
               </div>
-              <h3 class="text-xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">
+              <h3 class="text-xl font-bold theme-text mb-2 group-hover:text-emerald-400 transition-colors">
                 {project.title}
               </h3>
-              <p class="text-gray-400 mb-4">{project.description}</p>
+              <p class="theme-text-secondary mb-4">{project.description}</p>
               <div class="flex flex-wrap gap-2">
                 {project.tags.map((tag: string) => (
                   <span class="text-xs px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400">
@@ -88,12 +88,12 @@ const projects = allProjects.length > 0 ? allProjects.map(p => ({
   </section>
 
   <!-- Contribute CTA -->
-  <section class="py-24 bg-black border-t border-slate-800">
+  <section class="py-24 section-themed border-t theme-border">
     <div class="container mx-auto px-4 text-center">
-      <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+      <h2 class="text-3xl md:text-4xl font-bold theme-text mb-6">
         Want to contribute?
       </h2>
-      <p class="text-gray-400 max-w-2xl mx-auto mb-8">
+      <p class="theme-text-secondary max-w-2xl mx-auto mb-8">
         Join the DUCA Development Division and work on exciting projects with a supportive team.
         No experience required - just bring your curiosity!
       </p>
@@ -117,9 +117,4 @@ const projects = allProjects.length > 0 ? allProjects.map(p => ({
   </section>
 </DefaultLayout>
 
-<style is:global>
-  body {
-    background-color: #000;
-    color: #fff;
-  }
-</style>
+<!-- Theme styling handled by DefaultLayout -->

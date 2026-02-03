@@ -54,14 +54,14 @@ const contactMethods = [
   </section>
 
   <!-- Contact Methods -->
-  <section class="py-24 bg-black">
+  <section class="py-24 section-themed">
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {contactMethods.map((method) => (
-          <div class="p-8 rounded-2xl bg-gradient-to-b from-slate-800/30 to-slate-900/50 border border-slate-700/50 hover:border-blue-500/30 transition-colors">
+          <div class="p-8 rounded-2xl theme-card border theme-border hover:border-blue-500/30 transition-colors">
             <div class="text-4xl mb-4">{method.icon}</div>
-            <h3 class="text-xl font-bold text-white mb-2">{method.title}</h3>
-            <p class="text-gray-400 mb-4">{method.description}</p>
+            <h3 class="text-xl font-bold theme-text mb-2">{method.title}</h3>
+            <p class="theme-text-secondary mb-4">{method.description}</p>
             <a
               href={method.link}
               target="_blank"
@@ -80,7 +80,7 @@ const contactMethods = [
   </section>
 
   <!-- Discord CTA -->
-  <section class="py-24 bg-black">
+  <section class="py-24 section-themed">
     <div class="container mx-auto px-4">
       <WobbleCard
         containerClassName="bg-indigo-900 min-h-[300px]"
@@ -108,7 +108,7 @@ const contactMethods = [
   </section>
 
   <!-- Location Info -->
-  <section class="py-24 bg-black border-t border-slate-800">
+  <section class="py-24 section-themed border-t theme-border">
     <div class="container mx-auto px-4">
       <SectionHeading
         title="Find Us"
@@ -117,26 +117,21 @@ const contactMethods = [
       />
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-        <div class="p-8 rounded-2xl bg-slate-900/50 border border-slate-800">
-          <h3 class="text-xl font-bold text-white mb-4">Burwood Campus</h3>
-          <p class="text-gray-400 mb-2">221 Burwood Hwy</p>
-          <p class="text-gray-400 mb-2">Burwood VIC 3125</p>
-          <p class="text-gray-500 text-sm">Main meeting location for most events</p>
+        <div class="p-8 rounded-2xl theme-card border theme-border">
+          <h3 class="text-xl font-bold theme-text mb-4">Burwood Campus</h3>
+          <p class="theme-text-secondary mb-2">221 Burwood Hwy</p>
+          <p class="theme-text-secondary mb-2">Burwood VIC 3125</p>
+          <p class="theme-text-muted text-sm">Main meeting location for most events</p>
         </div>
-        <div class="p-8 rounded-2xl bg-slate-900/50 border border-slate-800">
-          <h3 class="text-xl font-bold text-white mb-4">Geelong Waurn Ponds Campus</h3>
-          <p class="text-gray-400 mb-2">75 Pigdons Rd</p>
-          <p class="text-gray-400 mb-2">Waurn Ponds VIC 3216</p>
-          <p class="text-gray-500 text-sm">Regular events for Geelong members</p>
+        <div class="p-8 rounded-2xl theme-card border theme-border">
+          <h3 class="text-xl font-bold theme-text mb-4">Geelong Waurn Ponds Campus</h3>
+          <p class="theme-text-secondary mb-2">75 Pigdons Rd</p>
+          <p class="theme-text-secondary mb-2">Waurn Ponds VIC 3216</p>
+          <p class="theme-text-muted text-sm">Regular events for Geelong members</p>
         </div>
       </div>
     </div>
   </section>
 </DefaultLayout>
 
-<style is:global>
-  body {
-    background-color: #000;
-    color: #fff;
-  }
-</style>
+<!-- Theme styling handled by DefaultLayout -->

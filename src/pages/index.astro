@@ -7,6 +7,7 @@ import TestimonialsSection from '@components/sections/TestimonialsSection'
 import PartnersSection from '@components/sections/PartnersSection'
 import DiscordCTASection from '@components/sections/DiscordCTASection'
 import BlogPreviewSection from '@components/sections/BlogPreviewSection'
+import FeaturedEventsSection from '@components/sections/FeaturedEventsSection'
 import { getCollection } from 'astro:content'
 
 // Fetch latest blog posts
@@ -21,6 +22,25 @@ const blogPosts = sortedPosts.map((post) => ({
   href: `/blog/${post.data.slug || post.id}`,
   image: post.data.featuredImage,
   category: post.data.tags?.[0] || 'Blog',
+}))
+
+// Fetch upcoming events (featured ones for homepage)
+const allEvents = await getCollection('events')
+const now = new Date()
+const upcomingEvents = allEvents
+  .filter((event) => new Date(event.data.eventDate) >= now)
+  .sort((a, b) => new Date(a.data.eventDate).getTime() - new Date(b.data.eventDate).getTime())
+  .slice(0, 3)
+
+const featuredEvents = upcomingEvents.map((event) => ({
+  title: event.data.title,
+  description: event.data.description,
+  eventDate: event.data.eventDate.toISOString(),
+  location: event.data.location,
+  registrationUrl: event.data.registrationUrl,
+  slug: event.data.slug,
+  tags: event.data.tags,
+  featuredImage: event.data.featuredImage,
 }))
 
 // Discord API for member count
@@ -49,6 +69,9 @@ try {
   <!-- Partners Logo Carousel -->
   <PartnersSection client:visible />
 
+  <!-- Featured Events Section -->
+  <FeaturedEventsSection events={featuredEvents} client:visible />
+
   <!-- What We Do Section -->
   <WhatWeDoSection client:visible />
 
@@ -63,12 +86,6 @@ try {
 </DefaultLayout>
 
 <style is:global>
-  /* Override default body background for dark theme */
-  body {
-    background-color: #000;
-    color: #fff;
-  }
-
   /* Ensure smooth scrolling */
   html {
     scroll-behavior: smooth;

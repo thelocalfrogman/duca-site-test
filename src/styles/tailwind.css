@@ -3,8 +3,30 @@
 @source '../../src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}';
 @custom-variant dark (&:where(.darkmode, .darkmode *));
 
-/* CSS Variables for animations */
+/* Theme-aware CSS Variables */
 :root {
+  /* Theme colors that change with dark/light mode */
+  --theme-bg: light-dark(#ffffff, #000000);
+  --theme-bg-secondary: light-dark(#f8fafc, #0f172a);
+  --theme-bg-tertiary: light-dark(#f1f5f9, #1e293b);
+  --theme-text: light-dark(#1e293b, #f8fafc);
+  --theme-text-secondary: light-dark(#475569, #94a3b8);
+  --theme-text-muted: light-dark(#64748b, #64748b);
+  --theme-border: light-dark(#e2e8f0, #334155);
+  --theme-border-subtle: light-dark(#f1f5f9, #1e293b);
+
+  /* Card backgrounds */
+  --theme-card-bg: light-dark(#ffffff, #0f172a);
+  --theme-card-bg-hover: light-dark(#f8fafc, #1e293b);
+
+  /* Section backgrounds for visual variety */
+  --theme-section-alt: light-dark(#f8fafc, #030712);
+
+  /* Gradient overlays */
+  --theme-gradient-start: light-dark(rgba(255,255,255,0.9), rgba(0,0,0,0.9));
+  --theme-gradient-end: light-dark(rgba(248,250,252,1), rgba(0,0,0,1));
+
+  /* Static colors */
   --white: #fff;
   --black: #000;
   --transparent: transparent;
@@ -121,14 +143,14 @@
   display: none;
 }
 
-/* Custom Background Patterns */
+/* Custom Background Patterns - Theme aware */
 .bg-dot-thick-neutral-300 {
-  background-image: radial-gradient(circle, #d4d4d4 1px, transparent 1px);
+  background-image: radial-gradient(circle, light-dark(#d4d4d4, #404040) 1px, transparent 1px);
   background-size: 16px 16px;
 }
 
 .bg-dot-thick-neutral-800 {
-  background-image: radial-gradient(circle, #262626 1px, transparent 1px);
+  background-image: radial-gradient(circle, light-dark(#a3a3a3, #262626) 1px, transparent 1px);
   background-size: 16px 16px;
 }
 
@@ -137,7 +159,13 @@
   background-size: 16px 16px;
 }
 
-/* Grid Pattern */
+/* Grid Pattern - Theme aware */
+.bg-grid-pattern {
+  background-image: linear-gradient(to right, light-dark(rgba(0,0,0,0.03), rgba(255,255,255,0.02)) 1px, transparent 1px),
+    linear-gradient(to bottom, light-dark(rgba(0,0,0,0.03), rgba(255,255,255,0.02)) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
 .bg-grid-white\/\[0\.02\] {
   background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
@@ -172,11 +200,11 @@
   background-clip: text;
 }
 
-/* Glass Effect */
+/* Glass Effect - Theme aware */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
+  background: light-dark(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.05));
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
 }
 
 /* Glow Effects */
@@ -190,7 +218,7 @@
 
 /* Focus visible for accessibility */
 .focus-ring {
-  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black;
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2;
 }
 
 /* Smooth transitions */
@@ -206,4 +234,45 @@
 
 .no-visible-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* Theme-aware utility classes for React components */
+.theme-bg {
+  background-color: var(--theme-bg);
+}
+
+.theme-bg-secondary {
+  background-color: var(--theme-bg-secondary);
+}
+
+.theme-text {
+  color: var(--theme-text);
+}
+
+.theme-text-secondary {
+  color: var(--theme-text-secondary);
+}
+
+.theme-text-muted {
+  color: var(--theme-text-muted);
+}
+
+.theme-border {
+  border-color: var(--theme-border);
+}
+
+.theme-card {
+  background-color: var(--theme-card-bg);
+  border-color: var(--theme-border);
+}
+
+/* Section styling that adapts to theme */
+.section-themed {
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+}
+
+.section-themed-alt {
+  background-color: var(--theme-section-alt);
+  color: var(--theme-text);
 }
