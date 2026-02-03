@@ -22,6 +22,17 @@ import { Icon } from 'astro-icon/components'
         <li class="menu-item">
             <Link href="/meet-the-team/">Meet The Team</Link>
         </li>
+        <li class="menu-item has-dropdown">
+            <button aria-expanded="false" aria-haspopup="true">Events</button>
+            <ul>
+                <li class="submenu-item">
+                    <Link href="/events/">All Events</Link>
+                </li>
+                <li class="submenu-item">
+                    <Link href="/calendar/">Calendar</Link>
+                </li>
+            </ul>
+        </li>
         <li class="menu-item">
             <Link href="/get-involved/">Get Involved</Link>
         </li>

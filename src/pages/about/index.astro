@@ -1,15 +1,19 @@
 ---
 import DefaultLayout from '@layouts/DefaultLayout.astro'
 import PageHeader from '@components/PageHeader.astro'
+import StackingBoxes from '@components/StackingBoxes.astro'
 import { Heading } from 'accessible-astro-components'
 import { Image } from 'astro:assets'
 ---
 
-<DefaultLayout title="Meet The Team">
+<DefaultLayout title="About Us">
     <PageHeader
         title="About Us"
         subtitle="DUCA is your gateway to hands-on learning, professional connections, and a supportive cybersecurity community!"
     />
+
+    <!-- What We Do - Dynamic Stacking Boxes -->
+    <StackingBoxes />
 
     <!-- Who we are -->
     <section class="container mb-24">

@@ -1,0 +1,562 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro'
+import PageHeader from '@components/PageHeader.astro'
+import { Heading, Link } from 'accessible-astro-components'
+import { Icon } from 'astro-icon/components'
+import { getCollection } from 'astro:content'
+
+// Get all events
+const allEvents = await getCollection('events')
+
+// Transform events for calendar
+const calendarEvents = allEvents.map((event) => ({
+  title: event.data.title,
+  date: event.data.eventDate.toISOString().split('T')[0],
+  endDate: event.data.endDate ? event.data.endDate.toISOString().split('T')[0] : null,
+  slug: event.data.slug,
+  location: event.data.location,
+  description: event.data.description,
+}))
+
+// JSON for client-side
+const eventsJson = JSON.stringify(calendarEvents)
+---
+
+<DefaultLayout title="Calendar">
+  <PageHeader
+    title="Event Calendar"
+    subtitle="View all DUCA events at a glance. Click on any event to see more details."
+  />
+
+  <section class="container mb-24">
+    <!-- Calendar Navigation -->
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <button id="prev-month" class="calendar-nav-btn" aria-label="Previous month">
+          <Icon name="lucide:chevron-left" size="1.5rem" />
+        </button>
+        <Heading level="h2" id="calendar-title" class="min-w-[200px] text-center">
+          Loading...
+        </Heading>
+        <button id="next-month" class="calendar-nav-btn" aria-label="Next month">
+          <Icon name="lucide:chevron-right" size="1.5rem" />
+        </button>
+      </div>
+      <button id="today-btn" class="today-btn">
+        Today
+      </button>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="calendar-container">
+      <!-- Day Headers -->
+      <div class="calendar-header">
+        <div class="day-header">Sun</div>
+        <div class="day-header">Mon</div>
+        <div class="day-header">Tue</div>
+        <div class="day-header">Wed</div>
+        <div class="day-header">Thu</div>
+        <div class="day-header">Fri</div>
+        <div class="day-header">Sat</div>
+      </div>
+
+      <!-- Calendar Days -->
+      <div id="calendar-grid" class="calendar-grid">
+        <!-- Populated by JavaScript -->
+      </div>
+    </div>
+
+    <!-- Event Details Panel -->
+    <div id="event-panel" class="event-panel hidden">
+      <div class="event-panel-header">
+        <Heading level="h3" id="event-panel-title" size="h5">Event Details</Heading>
+        <button id="close-panel" class="close-btn" aria-label="Close panel">
+          <Icon name="lucide:x" size="1.5rem" />
+        </button>
+      </div>
+      <div id="event-panel-content" class="event-panel-content">
+        <!-- Populated by JavaScript -->
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="mt-8 flex flex-wrap items-center gap-6 text-sm">
+      <div class="flex items-center gap-2">
+        <span class="legend-dot legend-upcoming"></span>
+        <span>Upcoming Event</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="legend-dot legend-past"></span>
+        <span>Past Event</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="legend-dot legend-today"></span>
+        <span>Today</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Links -->
+  <section class="container mb-24">
+    <div class="flex flex-wrap justify-center gap-4">
+      <Link href="/events/" isButton type="secondary" animateOnHover animationType="nudge">
+        <Icon name="lucide:list" size="1.25rem" />
+        View All Events
+      </Link>
+      <Link href="https://discord.gg/duca" isButton type="primary" animateOnHover animationType="nudge" isExternal>
+        <Icon name="lucide:message-circle" size="1.25rem" />
+        Join Discord for Updates
+      </Link>
+    </div>
+  </section>
+</DefaultLayout>
+
+<script define:vars={{ eventsJson }}>
+  const events = JSON.parse(eventsJson)
+  let currentDate = new Date()
+  let currentMonth = currentDate.getMonth()
+  let currentYear = currentDate.getFullYear()
+
+  function init() {
+    renderCalendar()
+    setupEventListeners()
+  }
+
+  function setupEventListeners() {
+    document.getElementById('prev-month')?.addEventListener('click', () => {
+      currentMonth--
+      if (currentMonth < 0) {
+        currentMonth = 11
+        currentYear--
+      }
+      renderCalendar()
+    })
+
+    document.getElementById('next-month')?.addEventListener('click', () => {
+      currentMonth++
+      if (currentMonth > 11) {
+        currentMonth = 0
+        currentYear++
+      }
+      renderCalendar()
+    })
+
+    document.getElementById('today-btn')?.addEventListener('click', () => {
+      const today = new Date()
+      currentMonth = today.getMonth()
+      currentYear = today.getFullYear()
+      renderCalendar()
+    })
+
+    document.getElementById('close-panel')?.addEventListener('click', () => {
+      document.getElementById('event-panel')?.classList.add('hidden')
+    })
+  }
+
+  function renderCalendar() {
+    const grid = document.getElementById('calendar-grid')
+    const title = document.getElementById('calendar-title')
+    if (!grid || !title) return
+
+    // Update title
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December']
+    title.textContent = `${monthNames[currentMonth]} ${currentYear}`
+
+    // Clear grid
+    grid.innerHTML = ''
+
+    // Get first day of month and total days
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay()
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
+    const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate()
+
+    const today = new Date()
+    const todayStr = today.toISOString().split('T')[0]
+
+    // Previous month days
+    for (let i = firstDay - 1; i >= 0; i--) {
+      const day = daysInPrevMonth - i
+      const cell = createDayCell(day, 'other-month')
+      grid.appendChild(cell)
+    }
+
+    // Current month days
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+      const isToday = dateStr === todayStr
+      const dayEvents = getEventsForDate(dateStr)
+
+      const cell = createDayCell(day, isToday ? 'today' : 'current', dayEvents, dateStr)
+      grid.appendChild(cell)
+    }
+
+    // Next month days
+    const totalCells = firstDay + daysInMonth
+    const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7)
+    for (let day = 1; day <= remainingCells; day++) {
+      const cell = createDayCell(day, 'other-month')
+      grid.appendChild(cell)
+    }
+  }
+
+  function createDayCell(day, type, events = [], dateStr = '') {
+    const cell = document.createElement('div')
+    cell.className = `calendar-day ${type}`
+
+    const dayNum = document.createElement('span')
+    dayNum.className = 'day-number'
+    dayNum.textContent = day
+    cell.appendChild(dayNum)
+
+    if (events.length > 0) {
+      const eventContainer = document.createElement('div')
+      eventContainer.className = 'day-events'
+
+      events.forEach((event) => {
+        const eventDot = document.createElement('div')
+        const eventDate = new Date(event.date)
+        const isPast = eventDate < new Date()
+        eventDot.className = `event-indicator ${isPast ? 'past' : 'upcoming'}`
+        eventDot.title = event.title
+        eventContainer.appendChild(eventDot)
+      })
+
+      cell.appendChild(eventContainer)
+      cell.classList.add('has-events')
+      cell.addEventListener('click', () => showEventPanel(events, dateStr))
+    }
+
+    return cell
+  }
+
+  function getEventsForDate(dateStr) {
+    return events.filter((event) => {
+      const eventStart = event.date
+      const eventEnd = event.endDate || event.date
+
+      return dateStr >= eventStart && dateStr <= eventEnd
+    })
+  }
+
+  function showEventPanel(dayEvents, dateStr) {
+    const panel = document.getElementById('event-panel')
+    const content = document.getElementById('event-panel-content')
+    const title = document.getElementById('event-panel-title')
+
+    if (!panel || !content || !title) return
+
+    const date = new Date(dateStr + 'T00:00:00')
+    title.textContent = date.toLocaleDateString('en-AU', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+
+    content.innerHTML = dayEvents
+      .map((event) => {
+        const eventDate = new Date(event.date)
+        const isPast = eventDate < new Date()
+        return `
+          <a href="/events/${event.slug}" class="event-card ${isPast ? 'past' : 'upcoming'}">
+            <div class="event-card-header">
+              <span class="event-badge ${isPast ? 'past' : 'upcoming'}">${isPast ? 'Past' : 'Upcoming'}</span>
+            </div>
+            <h4 class="event-title">${event.title}</h4>
+            <p class="event-location">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              ${event.location}
+            </p>
+            <p class="event-description">${event.description}</p>
+          </a>
+        `
+      })
+      .join('')
+
+    panel.classList.remove('hidden')
+  }
+
+  // Initialize on page load and after view transitions
+  document.addEventListener('astro:page-load', init)
+  if (document.readyState === 'complete') {
+    init()
+  }
+</script>
+
+<style>
+  .calendar-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-m);
+    background: var(--background-color);
+    color: var(--foreground-color);
+    cursor: pointer;
+    transition: all var(--animation-speed-fast) var(--cubic-bezier);
+  }
+
+  .calendar-nav-btn:hover {
+    background: var(--link-color);
+    border-color: var(--link-color);
+    color: var(--background-color);
+  }
+
+  .today-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--link-color);
+    border-radius: var(--radius-m);
+    background: transparent;
+    color: var(--link-color);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--animation-speed-fast) var(--cubic-bezier);
+  }
+
+  .today-btn:hover {
+    background: var(--link-color);
+    color: var(--background-color);
+  }
+
+  .calendar-container {
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-l);
+    overflow: hidden;
+    background: var(--background-color);
+  }
+
+  .calendar-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: var(--link-color);
+    color: var(--background-color);
+  }
+
+  .day-header {
+    padding: 1rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .calendar-day {
+    position: relative;
+    min-height: 80px;
+    padding: 0.5rem;
+    border-right: 1px solid var(--border-color-subtle);
+    border-bottom: 1px solid var(--border-color-subtle);
+    background: var(--background-color);
+    transition: background var(--animation-speed-fast) var(--cubic-bezier);
+  }
+
+  .calendar-day:nth-child(7n) {
+    border-right: none;
+  }
+
+  .calendar-day.other-month {
+    opacity: 0.4;
+  }
+
+  .calendar-day.today {
+    background: light-dark(var(--color-primary-100), var(--color-primary-900));
+  }
+
+  .calendar-day.today .day-number {
+    background: var(--link-color);
+    color: var(--background-color);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .calendar-day.has-events {
+    cursor: pointer;
+  }
+
+  .calendar-day.has-events:hover {
+    background: light-dark(var(--color-neutral-200), var(--color-neutral-800));
+  }
+
+  .day-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+
+  .day-events {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 0.5rem;
+  }
+
+  .event-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .event-indicator.upcoming {
+    background: var(--color-success-500);
+  }
+
+  .event-indicator.past {
+    background: var(--color-neutral-400);
+  }
+
+  /* Event Panel */
+  .event-panel {
+    margin-top: 1.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-l);
+    background: var(--background-color);
+    overflow: hidden;
+  }
+
+  .event-panel.hidden {
+    display: none;
+  }
+
+  .event-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: light-dark(var(--color-neutral-100), var(--color-neutral-900));
+    border-bottom: 1px solid var(--border-color-subtle);
+  }
+
+  .close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    border: none;
+    background: transparent;
+    color: var(--foreground-color);
+    cursor: pointer;
+    border-radius: var(--radius-s);
+    transition: background var(--animation-speed-fast);
+  }
+
+  .close-btn:hover {
+    background: var(--border-color-subtle);
+  }
+
+  .event-panel-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .event-card {
+    display: block;
+    padding: 1rem;
+    border: 1px solid var(--border-color-subtle);
+    border-radius: var(--radius-m);
+    text-decoration: none;
+    color: var(--foreground-color);
+    transition: all var(--animation-speed-fast) var(--cubic-bezier);
+  }
+
+  .event-card:hover {
+    border-color: var(--link-color);
+    transform: translateY(-2px);
+    box-shadow: var(--elevation-2);
+  }
+
+  .event-card-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .event-badge {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .event-badge.upcoming {
+    background: light-dark(var(--color-success-100), var(--color-success-900));
+    color: light-dark(var(--color-success-700), var(--color-success-200));
+  }
+
+  .event-badge.past {
+    background: light-dark(var(--color-neutral-200), var(--color-neutral-800));
+    color: light-dark(var(--color-neutral-600), var(--color-neutral-300));
+  }
+
+  .event-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .event-location {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: light-dark(var(--color-neutral-600), var(--color-neutral-400));
+    margin-bottom: 0.5rem;
+  }
+
+  .event-description {
+    font-size: 0.875rem;
+    color: light-dark(var(--color-neutral-700), var(--color-neutral-300));
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Legend */
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .legend-upcoming {
+    background: var(--color-success-500);
+  }
+
+  .legend-past {
+    background: var(--color-neutral-400);
+  }
+
+  .legend-today {
+    background: var(--link-color);
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .calendar-day {
+      min-height: 60px;
+      padding: 0.25rem;
+    }
+
+    .day-header {
+      padding: 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    .day-number {
+      font-size: 0.75rem;
+    }
+  }
+</style>
