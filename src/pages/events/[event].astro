@@ -1,0 +1,221 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro'
+import { Heading, Link } from 'accessible-astro-components'
+import { Icon } from 'astro-icon/components'
+import { getCollection, render } from 'astro:content'
+
+export async function getStaticPaths() {
+  const events = await getCollection('events')
+  return events.map((event) => ({
+    params: { event: event.data.slug },
+    props: { event },
+  }))
+}
+
+const { event } = Astro.props
+const { Content } = await render(event)
+
+const eventDate = new Date(event.data.eventDate)
+const now = new Date()
+const isPast = eventDate < now
+
+// Format dates
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('en-AU', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+}
+
+const formatTime = (date: Date) => {
+  return date.toLocaleTimeString('en-AU', {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+---
+
+<DefaultLayout title={event.data.title}>
+  <article class="container my-24">
+    <!-- Back link -->
+    <div class="mb-8">
+      <Link href="/events/" class="inline-flex items-center gap-2 text-sm">
+        <Icon name="lucide:arrow-left" size="1rem" />
+        Back to all events
+      </Link>
+    </div>
+
+    <!-- Event Header -->
+    <header class="mb-12">
+      {
+        isPast ? (
+          <span class="mb-4 inline-block rounded-full bg-gray-200 px-3 py-1 text-sm font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+            Past Event
+          </span>
+        ) : (
+          <span class="mb-4 inline-block rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800 dark:bg-green-900 dark:text-green-200">
+            Upcoming
+          </span>
+        )
+      }
+      <Heading level="h1" class="mb-4">
+        {event.data.title}
+      </Heading>
+      <p class="mb-6 text-xl text-gray-600 dark:text-gray-400">
+        {event.data.description}
+      </p>
+
+      <!-- Event Meta -->
+      <div class="grid gap-4 rounded-lg border border-(--border-color-subtle) bg-neutral-100 p-6 dark:bg-neutral-900 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex items-start gap-3">
+          <Icon name="lucide:calendar" size="1.5rem" class="mt-0.5 shrink-0 text-primary-400" />
+          <div>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Date</p>
+            <p class="font-semibold">{formatDate(eventDate)}</p>
+            {
+              event.data.endDate && event.data.endDate.getTime() !== eventDate.getTime() && (
+                <p class="text-sm text-gray-500">to {formatDate(event.data.endDate)}</p>
+              )
+            }
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <Icon name="lucide:map-pin" size="1.5rem" class="mt-0.5 shrink-0 text-primary-400" />
+          <div>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Location</p>
+            <p class="font-semibold">{event.data.location}</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <Icon name="lucide:user" size="1.5rem" class="mt-0.5 shrink-0 text-primary-400" />
+          <div>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Organizer</p>
+            <p class="font-semibold">{event.data.organizer}</p>
+          </div>
+        </div>
+
+        {
+          !isPast && event.data.registrationUrl && (
+            <div class="flex items-center">
+              <Link
+                href={event.data.registrationUrl}
+                isButton
+                type="primary"
+                animateOnHover
+                animationType="boop"
+                isExternal
+                class="w-full justify-center"
+              >
+                <Icon name="lucide:ticket" size="1.25rem" />
+                Register Now
+              </Link>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Tags -->
+      {
+        event.data.tags && event.data.tags.length > 0 && (
+          <div class="mt-4 flex flex-wrap gap-2">
+            {event.data.tags.map((tag: string) => (
+              <span class="rounded-full bg-primary-100 px-3 py-1 text-sm text-primary-700 dark:bg-primary-900 dark:text-primary-200">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )
+      }
+    </header>
+
+    <!-- Event Content -->
+    <div class="prose prose-lg dark:prose-invert max-w-none">
+      <Content />
+    </div>
+
+    <!-- Footer CTA -->
+    <footer class="mt-16 rounded-lg border-2 border-solid border-(--border-color-subtle) bg-neutral-100 p-8 dark:bg-neutral-900">
+      <div class="flex flex-col items-center justify-between gap-6 sm:flex-row">
+        <div>
+          <Heading level="h3" size="h5" class="mb-2">
+            {isPast ? 'Missed this event?' : 'Interested in attending?'}
+          </Heading>
+          <p class="text-gray-600 dark:text-gray-400">
+            {isPast ? 'Join our Discord to stay updated on future events!' : 'Join our Discord for event reminders and updates!'}
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          {
+            !isPast && event.data.registrationUrl && (
+              <Link
+                href={event.data.registrationUrl}
+                isButton
+                type="primary"
+                animateOnHover
+                animationType="boop"
+                isExternal
+              >
+                <Icon name="lucide:ticket" size="1.25rem" />
+                Register
+              </Link>
+            )
+          }
+          <Link href="https://discord.gg/duca" isButton type="secondary" animateOnHover animationType="boop" isExternal>
+            <Icon name="lucide:message-circle" size="1.25rem" />
+            Join Discord
+          </Link>
+        </div>
+      </div>
+    </footer>
+  </article>
+</DefaultLayout>
+
+<style is:global>
+  .prose {
+    h2 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-size: var(--font-size-3);
+      font-weight: 700;
+    }
+
+    h3 {
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      font-size: var(--font-size-2);
+      font-weight: 600;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      line-height: 1.75;
+    }
+
+    ul,
+    ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    blockquote {
+      margin: 1.5rem 0;
+      padding-left: 1rem;
+      border-left: 4px solid var(--link-color);
+      font-style: italic;
+      color: var(--foreground-color);
+      opacity: 0.9;
+    }
+
+    strong {
+      font-weight: 700;
+    }
+  }
+</style>

@@ -1,0 +1,149 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro'
+import PageHeader from '@components/PageHeader.astro'
+import { Card, Heading, Link } from 'accessible-astro-components'
+import { Icon } from 'astro-icon/components'
+import { getCollection } from 'astro:content'
+
+// Import default event images
+import eventImage1 from '@assets/images/projects/project-image-1.png'
+import eventImage2 from '@assets/images/projects/project-image-2.png'
+import eventImage3 from '@assets/images/projects/project-image-3.png'
+
+const defaultImages = [eventImage1, eventImage2, eventImage3]
+
+// Get all events
+const allEvents = await getCollection('events')
+const now = new Date()
+
+// Split into upcoming and past events
+const upcomingEvents = allEvents
+  .filter((event) => new Date(event.data.eventDate) >= now)
+  .sort((a, b) => new Date(a.data.eventDate).getTime() - new Date(b.data.eventDate).getTime())
+  .map((event, index) => ({
+    ...event,
+    displayImage: defaultImages[index % defaultImages.length],
+  }))
+
+const pastEvents = allEvents
+  .filter((event) => new Date(event.data.eventDate) < now)
+  .sort((a, b) => new Date(b.data.eventDate).getTime() - new Date(a.data.eventDate).getTime())
+  .map((event, index) => ({
+    ...event,
+    displayImage: defaultImages[index % defaultImages.length],
+  }))
+
+// Format date helper
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('en-AU', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })
+}
+---
+
+<DefaultLayout title="Events">
+  <PageHeader
+    title="Events"
+    subtitle="Join us for workshops, networking nights, CTF competitions, and more. There's always something happening at DUCA!"
+  />
+
+  <!-- Upcoming Events Section -->
+  <section class="container mb-24">
+    <div class="mb-8 flex items-center justify-between">
+      <Heading level="h2" class="flex items-center gap-3">
+        <Icon name="lucide:calendar-clock" size="2rem" class="text-primary-400" />
+        Upcoming Events
+      </Heading>
+      <Link href="/calendar/" class="flex items-center gap-2 text-sm">
+        <Icon name="lucide:calendar" size="1.25rem" />
+        View Calendar
+      </Link>
+    </div>
+
+    {
+      upcomingEvents.length > 0 ? (
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {upcomingEvents.map((event) => (
+            <Card
+              imageComponent={event.displayImage}
+              url={'/events/' + event.data.slug}
+              headingLevel="h3"
+              title={event.data.title}
+              footer={formatDate(event.data.eventDate) + ' · ' + event.data.location}
+            >
+              {event.data.description}
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div class="rounded-lg border-2 border-dashed border-gray-300 p-12 text-center dark:border-gray-700">
+          <Icon name="lucide:calendar-x" size="3rem" class="mx-auto mb-4 text-gray-400" />
+          <p class="text-lg text-gray-600 dark:text-gray-400">No upcoming events scheduled at the moment.</p>
+          <p class="mt-2 text-gray-500 dark:text-gray-500">
+            Join our Discord to be the first to know about new events!
+          </p>
+          <div class="mt-6">
+            <Link href="https://discord.gg/duca" isButton type="primary" animateOnHover animationType="boop" isExternal>
+              <Icon name="lucide:message-circle" size="1.25rem" />
+              Join Discord
+            </Link>
+          </div>
+        </div>
+      )
+    }
+  </section>
+
+  <!-- Past Events Section -->
+  <section class="container mb-24">
+    <Heading level="h2" class="mb-8 flex items-center gap-3">
+      <Icon name="lucide:history" size="2rem" class="text-secondary-400" />
+      Past Events
+    </Heading>
+
+    {
+      pastEvents.length > 0 ? (
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {pastEvents.map((event) => (
+            <Card
+              imageComponent={event.displayImage}
+              url={'/events/' + event.data.slug}
+              headingLevel="h3"
+              title={event.data.title}
+              footer={formatDate(event.data.eventDate) + ' · ' + event.data.location}
+            >
+              {event.data.description}
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <p class="text-lg text-gray-600 dark:text-gray-400">No past events to display.</p>
+      )
+    }
+  </section>
+
+  <!-- CTA Section -->
+  <section class="container mb-24">
+    <div
+      class="rounded-lg border-2 border-solid border-(--border-color-subtle) bg-neutral-100 p-12 text-center dark:bg-neutral-900"
+    >
+      <Heading level="h2" class="mb-4">Never miss an event</Heading>
+      <p class="mx-auto mb-8 max-w-2xl text-lg">
+        Join our Discord community to get instant notifications about upcoming events, workshop reminders, and connect
+        with other cybersecurity enthusiasts.
+      </p>
+      <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <Link href="https://discord.gg/duca" isButton type="primary" animateOnHover animationType="boop" isExternal>
+          <Icon name="lucide:message-circle" size="1.5rem" />
+          Join Our Discord
+        </Link>
+        <Link href="/calendar/" isButton type="secondary" animateOnHover animationType="boop">
+          <Icon name="lucide:calendar" size="1.5rem" />
+          View Calendar
+        </Link>
+      </div>
+    </div>
+  </section>
+</DefaultLayout>

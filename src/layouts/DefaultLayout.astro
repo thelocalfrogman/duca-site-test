@@ -21,6 +21,19 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
+    <!-- Prevent flash of unstyled content - apply dark mode before render -->
+    <script is:inline>
+      (function() {
+        const darkMode = localStorage.getItem('darkMode');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (darkMode === 'enabled' || (darkMode === null && prefersDark)) {
+          document.documentElement.classList.add('darkmode');
+          document.documentElement.style.colorScheme = 'dark';
+        }
+      })();
+    </script>
+
     <!-- favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
