@@ -1,7 +1,6 @@
 ---
 import Navigation from '../components/Navigation.astro'
-import { DarkMode, Link, SkipLink } from 'accessible-astro-components'
-import { Icon } from 'astro-icon/components'
+import { Link, SkipLink } from 'accessible-astro-components'
 
 /**
  * Header Component
@@ -39,12 +38,6 @@ import { Icon } from 'astro-icon/components'
         </li>
         <li class="menu-item highlight">
             <Link href="/join/">Join Us</Link>
-        </li>
-        <li class="menu-item type-icon animate-rotate">
-            <DarkMode>
-                <Icon aria-hidden="true" name="lucide:moon" slot="light" />
-                <Icon aria-hidden="true" name="lucide:sun" slot="dark" />
-            </DarkMode>
         </li>
     </Navigation>
 </header>

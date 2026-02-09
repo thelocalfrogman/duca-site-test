@@ -10,7 +10,7 @@ const whatWeDoCards = [
       "Learn practical cybersecurity skills through hands-on workshops covering topics like ethical hacking, network security, digital forensics, and malware analysis. Our workshops are designed for all skill levels, from complete beginners to advanced practitioners.",
     icon: "🔐",
     color: "#d648ff",
-    bgGradient: "bg-gradient-to-br from-purple-900 via-purple-800 to-slate-900",
+    bgColor: "#1e1033",
   },
   {
     title: "CTF Competitions",
@@ -18,7 +18,7 @@ const whatWeDoCards = [
       "Participate in Capture The Flag events to test your skills against real-world security challenges. Our CTF division trains members and competes in national and international competitions, helping you build practical problem-solving skills.",
     icon: "🚩",
     color: "#ef4444",
-    bgGradient: "bg-gradient-to-br from-red-900 via-red-800 to-slate-900",
+    bgColor: "#2d1216",
   },
   {
     title: "Industry Connections",
@@ -26,7 +26,7 @@ const whatWeDoCards = [
       "Meet professionals from leading cybersecurity companies through our networking events, guest lectures, and career panels. Discover internship and job opportunities, get resume reviews, and build relationships that will help launch your career.",
     icon: "🤝",
     color: "#06b6d4",
-    bgGradient: "bg-gradient-to-br from-cyan-900 via-cyan-800 to-slate-900",
+    bgColor: "#0c2a32",
   },
   {
     title: "Community Building",
@@ -34,7 +34,7 @@ const whatWeDoCards = [
       "Connect with like-minded students passionate about cybersecurity. Share knowledge, collaborate on projects, and build your professional network. Our Discord server has 750+ members ready to help and learn together.",
     icon: "👥",
     color: "#22c55e",
-    bgGradient: "bg-gradient-to-br from-green-900 via-green-800 to-slate-900",
+    bgColor: "#0d2818",
   },
   {
     title: "Development Projects",
@@ -42,7 +42,7 @@ const whatWeDoCards = [
       "Work on real software projects with our development division. Build tools, platforms, and applications that serve the club and the broader cybersecurity community. Gain practical coding experience while making an impact.",
     icon: "💻",
     color: "#f97316",
-    bgGradient: "bg-gradient-to-br from-orange-900 via-orange-800 to-slate-900",
+    bgColor: "#2d1a0a",
   },
   {
     title: "Learning Resources",
@@ -50,7 +50,7 @@ const whatWeDoCards = [
       "Access curated learning materials, study guides, and resources to help you excel in your cybersecurity studies and career. From certification prep to specialized tutorials, we've got you covered at every step of your journey.",
     icon: "📚",
     color: "#8b5cf6",
-    bgGradient: "bg-gradient-to-br from-violet-900 via-violet-800 to-slate-900",
+    bgColor: "#1a1433",
   },
 ];
 

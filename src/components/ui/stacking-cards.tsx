@@ -8,7 +8,7 @@ interface StackingCard {
   description: string;
   icon: string;
   color: string;
-  bgGradient: string;
+  bgColor: string;
 }
 
 export const StackingCards = ({
@@ -22,8 +22,7 @@ export const StackingCards = ({
   const [containerHeight, setContainerHeight] = useState(0);
 
   useEffect(() => {
-    // Set container height based on number of cards
-    const height = cards.length * 100 + 100; // 100vh per card + extra space
+    const height = cards.length * 80 + 50;
     setContainerHeight(height);
   }, [cards.length]);
 
@@ -33,8 +32,8 @@ export const StackingCards = ({
       className={cn("relative", className)}
       style={{ height: `${containerHeight}vh` }}
     >
-      <div className="sticky top-24 h-[80vh] flex items-center justify-center overflow-hidden">
-        <div className="relative w-full max-w-4xl mx-auto px-4">
+      <div className="sticky top-24 h-[70vh] flex items-center justify-center">
+        <div className="relative w-full max-w-4xl mx-auto px-4 h-[400px]">
           {cards.map((card, index) => (
             <StackingCardItem
               key={card.title}
@@ -66,30 +65,40 @@ const StackingCardItem = ({
     offset: ["start start", "end end"],
   });
 
-  // Calculate the scroll range for this card
-  const cardStart = index / totalCards;
-  const cardEnd = (index + 1) / totalCards;
+  const cardRange = 1 / totalCards;
+  const cardStart = index * cardRange;
+  const cardPeak = cardStart + cardRange * 0.5;
+  const cardEnd = cardStart + cardRange;
 
-  // Scale and opacity transforms
-  const scale = useTransform(
-    scrollYProgress,
-    [cardStart, cardEnd],
-    [1, 0.9]
-  );
-
+  // Card starts below, rises up, then moves up and shrinks as next card comes
   const y = useTransform(
     scrollYProgress,
-    [cardStart, cardEnd, cardEnd + 0.1],
-    [0, -20 * index, -50 - 20 * index]
+    [
+      Math.max(0, cardStart - cardRange * 0.3),
+      cardStart,
+      cardPeak,
+      Math.min(1, cardEnd + cardRange * 0.5),
+    ],
+    [100, 0, 0, -30 - index * 15]
   );
 
+  const scale = useTransform(
+    scrollYProgress,
+    [cardStart, cardPeak, cardEnd],
+    [0.95, 1, 0.92 - index * 0.02]
+  );
+
+  // Only visible during its range
   const opacity = useTransform(
     scrollYProgress,
-    [cardStart, cardEnd - 0.05, cardEnd],
-    [1, 1, index === totalCards - 1 ? 1 : 0.3]
+    [
+      Math.max(0, cardStart - cardRange * 0.2),
+      cardStart,
+      cardEnd,
+      Math.min(1, cardEnd + cardRange * 0.3),
+    ],
+    [0, 1, 1, index === totalCards - 1 ? 1 : 0]
   );
-
-  const zIndex = totalCards - index;
 
   return (
     <motion.div
@@ -97,26 +106,21 @@ const StackingCardItem = ({
         scale,
         y,
         opacity,
-        zIndex,
+        zIndex: totalCards - index + 10,
       }}
-      className="absolute inset-0 flex items-center justify-center"
+      className="absolute inset-x-0 top-0"
     >
       <div
-        className={cn(
-          "w-full rounded-3xl p-8 md:p-12 shadow-2xl border border-white/10",
-          card.bgGradient
-        )}
+        className="w-full rounded-3xl p-8 md:p-12 shadow-2xl border border-white/10"
+        style={{ backgroundColor: card.bgColor }}
       >
         <div className="flex flex-col md:flex-row items-start gap-6">
-          {/* Icon */}
           <div
             className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center text-4xl md:text-5xl"
-            style={{ backgroundColor: `${card.color}20` }}
+            style={{ backgroundColor: `${card.color}30` }}
           >
             {card.icon}
           </div>
-
-          {/* Content */}
           <div className="flex-1">
             <h3
               className="text-2xl md:text-3xl font-bold mb-4"
@@ -124,7 +128,7 @@ const StackingCardItem = ({
             >
               {card.title}
             </h3>
-            <p className="text-white/80 text-lg leading-relaxed">
+            <p className="text-white/90 text-lg leading-relaxed">
               {card.description}
             </p>
           </div>

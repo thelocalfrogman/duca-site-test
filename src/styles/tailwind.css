@@ -3,28 +3,28 @@
 @source '../../src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}';
 @custom-variant dark (&:where(.darkmode, .darkmode *));
 
-/* Theme-aware CSS Variables */
+/* Dark Mode CSS Variables */
 :root {
-  /* Theme colors that change with dark/light mode */
-  --theme-bg: light-dark(#ffffff, #000000);
-  --theme-bg-secondary: light-dark(#f8fafc, #0f172a);
-  --theme-bg-tertiary: light-dark(#f1f5f9, #1e293b);
-  --theme-text: light-dark(#1e293b, #f8fafc);
-  --theme-text-secondary: light-dark(#475569, #94a3b8);
-  --theme-text-muted: light-dark(#64748b, #64748b);
-  --theme-border: light-dark(#e2e8f0, #334155);
-  --theme-border-subtle: light-dark(#f1f5f9, #1e293b);
+  /* Dark mode colors */
+  --theme-bg: #000000;
+  --theme-bg-secondary: #0f172a;
+  --theme-bg-tertiary: #1e293b;
+  --theme-text: #f8fafc;
+  --theme-text-secondary: #94a3b8;
+  --theme-text-muted: #64748b;
+  --theme-border: #334155;
+  --theme-border-subtle: #1e293b;
 
   /* Card backgrounds */
-  --theme-card-bg: light-dark(#ffffff, #0f172a);
-  --theme-card-bg-hover: light-dark(#f8fafc, #1e293b);
+  --theme-card-bg: #0f172a;
+  --theme-card-bg-hover: #1e293b;
 
   /* Section backgrounds for visual variety */
-  --theme-section-alt: light-dark(#f8fafc, #030712);
+  --theme-section-alt: #030712;
 
   /* Gradient overlays */
-  --theme-gradient-start: light-dark(rgba(255,255,255,0.9), rgba(0,0,0,0.9));
-  --theme-gradient-end: light-dark(rgba(248,250,252,1), rgba(0,0,0,1));
+  --theme-gradient-start: rgba(0,0,0,0.9);
+  --theme-gradient-end: rgba(0,0,0,1);
 
   /* Static colors */
   --white: #fff;
@@ -143,14 +143,14 @@
   display: none;
 }
 
-/* Custom Background Patterns - Theme aware */
+/* Custom Background Patterns */
 .bg-dot-thick-neutral-300 {
-  background-image: radial-gradient(circle, light-dark(#d4d4d4, #404040) 1px, transparent 1px);
+  background-image: radial-gradient(circle, #404040 1px, transparent 1px);
   background-size: 16px 16px;
 }
 
 .bg-dot-thick-neutral-800 {
-  background-image: radial-gradient(circle, light-dark(#a3a3a3, #262626) 1px, transparent 1px);
+  background-image: radial-gradient(circle, #262626 1px, transparent 1px);
   background-size: 16px 16px;
 }
 
@@ -159,10 +159,10 @@
   background-size: 16px 16px;
 }
 
-/* Grid Pattern - Theme aware */
+/* Grid Pattern */
 .bg-grid-pattern {
-  background-image: linear-gradient(to right, light-dark(rgba(0,0,0,0.03), rgba(255,255,255,0.02)) 1px, transparent 1px),
-    linear-gradient(to bottom, light-dark(rgba(0,0,0,0.03), rgba(255,255,255,0.02)) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
@@ -200,11 +200,34 @@
   background-clip: text;
 }
 
-/* Glass Effect - Theme aware */
+/* Glass Effect */
 .glass {
-  background: light-dark(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.05));
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
-  border: 1px solid light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Click Ripple Animation */
+@keyframes click-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+.click-effect {
+  position: fixed;
+  pointer-events: none;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(214, 72, 255, 0.4) 0%, rgba(124, 58, 237, 0.2) 50%, transparent 70%);
+  animation: click-ripple 0.6s ease-out forwards;
+  z-index: 9999;
 }
 
 /* Glow Effects */
